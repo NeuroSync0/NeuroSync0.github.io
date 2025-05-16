@@ -1,6 +1,26 @@
+* {
+    background-color: #1e2326;
+    color:white;
+}
+
+a {text-decoration:none; color:#d3c6aa; font-weight: bold; font-style:italic}
+
+button {
+    background-color: #272e33;
+    color: #D8DEE9;
+    border: none;
+    padding: 3px 5px;
+}
+button:hover {
+    background-color: #384b55;
+}
+button:active {
+    background-color: #384b55;
+}
 .center {
   margin: auto;
   width: 50%;
   border: 3px solid green;
   padding: 10px;
 }
+
