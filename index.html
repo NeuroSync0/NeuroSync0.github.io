@@ -1,51 +1,136 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Demo KI-Chatbot</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .header {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .modes {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .modes button {
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .modes button.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+    .chatbox {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+    .message {
+      margin-bottom: 8px;
+    }
+    .message.user {
+      color: #2563eb;
+    }
+    .message.bot {
+      color: #4b5563;
+    }
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .input-area button {
+      padding: 8px 16px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Demo KI-Chatbot</div>
 
-export default function ChatbotLayout() {
-  const [messages, setMessages] = useState([
-    { from: "bot", text: "Hallo! Wie kann ich dir helfen?" }
-  ]);
-  const [input, setInput] = useState("");
-  const [mode, setMode] = useState("best");
-
-  const handleSend = () => {
-    if (!input) return;
-    setMessages([...messages, { from: "user", text: input }]);
-    setInput("");
-    // Hier würde normalerweise eine Anfrage an die KI gehen
-    setMessages((prev) => [...prev, { from: "bot", text: `(${mode}-Modus) Antwort auf: "${input}"` }]);
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-100 p-4 flex flex-col items-center">
-      <div className="w-full max-w-2xl space-y-4">
-        <h1 className="text-2xl font-bold text-center">Demo KI-Chatbot</h1>
-
-        <ToggleGroup type="single" value={mode} onValueChange={setMode} className="flex justify-center">
-          <ToggleGroupItem value="fast">So schnell wie möglich</ToggleGroupItem>
-          <ToggleGroupItem value="best">So gut wie möglich</ToggleGroupItem>
-          <ToggleGroupItem value="balanced">Ausgeglichen</ToggleGroupItem>
-        </ToggleGroup>
-
-        <div className="bg-white rounded-xl shadow-md p-4 h-[500px] overflow-y-auto space-y-2">
-          {messages.map((msg, i) => (
-            <div key={i} className={`text-${msg.from === "bot" ? "gray-700" : "blue-700"}`}>{msg.text}</div>
-          ))}
-        </div>
-
-        <div className="flex space-x-2">
-          <Input
-            placeholder="Deine Nachricht..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-grow"
-          />
-          <Button onClick={handleSend}>Senden</Button>
-        </div>
-      </div>
+    <div class="modes">
+      <button onclick="setMode('fast')" id="fast">Schnell</button>
+      <button onclick="setMode('best')" id="best" class="active">Gut</button>
+      <button onclick="setMode('balanced')" id="balanced">Ausgeglichen</button>
     </div>
-  );
-}
+
+    <div class="chatbox" id="chatbox">
+      <div class="message bot">Hallo! Wie kann ich dir helfen?</div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Deine Nachricht..." />
+      <button onclick="sendMessage()">Senden</button>
+    </div>
+  </div>
+
+  <script>
+    let mode = 'best';
+
+    function setMode(selected) {
+      mode = selected;
+      document.querySelectorAll('.modes button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(selected).classList.add('active');
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatbox = document.getElementById('chatbox');
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = text;
+      chatbox.appendChild(userMsg);
+
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      botMsg.textContent = `(${mode}-Modus) Antwort auf: "${text}"`;
+      chatbox.appendChild(botMsg);
+
+      chatbox.scrollTop = chatbox.scrollHeight;
+      input.value = '';
+    }
+  </script>
+</body>
+</html>
