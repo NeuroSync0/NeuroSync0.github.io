@@ -1,18 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-        <title>Project NeuroSync</title>
-        <link id="sheet" rel="stylesheet" href="style.css">                       <!--Include colour theme-->
-<script src="script.js"></script>                                                 <!--Include main script-->
-<body>
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
-<div style="text-align: center;">
-<!--M A I N   B O D Y-->
-<!--T I T L E-->
-    <div>
-        <p style="font-size:20px;">Welcome to</p>
-        <p style="font-size:50px;">Welcome to</p>
+export default function ChatbotLayout() {
+  const [messages, setMessages] = useState([
+    { from: "bot", text: "Hallo! Wie kann ich dir helfen?" }
+  ]);
+  const [input, setInput] = useState("");
+  const [mode, setMode] = useState("best");
+
+  const handleSend = () => {
+    if (!input) return;
+    setMessages([...messages, { from: "user", text: input }]);
+    setInput("");
+    // Hier würde normalerweise eine Anfrage an die KI gehen
+    setMessages((prev) => [...prev, { from: "bot", text: `(${mode}-Modus) Antwort auf: "${input}"` }]);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-4 flex flex-col items-center">
+      <div className="w-full max-w-2xl space-y-4">
+        <h1 className="text-2xl font-bold text-center">Demo KI-Chatbot</h1>
+
+        <ToggleGroup type="single" value={mode} onValueChange={setMode} className="flex justify-center">
+          <ToggleGroupItem value="fast">So schnell wie möglich</ToggleGroupItem>
+          <ToggleGroupItem value="best">So gut wie möglich</ToggleGroupItem>
+          <ToggleGroupItem value="balanced">Ausgeglichen</ToggleGroupItem>
+        </ToggleGroup>
+
+        <div className="bg-white rounded-xl shadow-md p-4 h-[500px] overflow-y-auto space-y-2">
+          {messages.map((msg, i) => (
+            <div key={i} className={`text-${msg.from === "bot" ? "gray-700" : "blue-700"}`}>{msg.text}</div>
+          ))}
+        </div>
+
+        <div className="flex space-x-2">
+          <Input
+            placeholder="Deine Nachricht..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-grow"
+          />
+          <Button onClick={handleSend}>Senden</Button>
+        </div>
+      </div>
     </div>
-  
-</div>
-</body>
-</html>
+  );
+}
