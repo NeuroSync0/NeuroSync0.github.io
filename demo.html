@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Demo NeuroSync</title>
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --text: #111827;
+      --card: #ffffff;
+      --border: #ddd;
+      --highlight: #2563eb;
+      --bot-text: #4b5563;
+      --user-text: #2563eb;
+    }
+
+    .dark {
+      --bg: #1f2937;
+      --text: #f9fafb;
+      --card: #374151;
+      --border: #4b5563;
+      --highlight: #3b82f6;
+      --bot-text: #d1d5db;
+      --user-text: #93c5fd;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: var(--card);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .top-buttons button {
+      padding: 6px 12px;
+      background: var(--highlight);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .modes {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .modes button {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      background: #f9f9f9;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .modes button.active {
+      background: var(--highlight);
+      color: white;
+      border-color: var(--highlight);
+    }
+
+    .chatbox {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .dark .chatbox {
+      background: #4b5563;
+    }
+
+    .message {
+      margin-bottom: 8px;
+    }
+
+    .message.user {
+      color: var(--user-text);
+    }
+
+    .message.bot {
+      color: var(--bot-text);
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .input-area button {
+      padding: 8px 16px;
+      background: var(--highlight);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top-buttons">
+      <button onclick="alert('Abo aktivieren: 14,69€ / Monat (nur Demo)')">Profil</button>
+      <button onclick="toggleDarkMode()">Darkmode/Lightmode</button>
+    </div>
+
+    <div class="header">Demo NeuroSync</div>
+
+    <div class="modes">
+      <button onclick="setMode('fast')" id="fast">Schnell</button>
+      <button onclick="setMode('best')" id="best" class="active">Gut</button>
+      <button onclick="setMode('balanced')" id="balanced">Ausgeglichen</button>
+    </div>
+
+    <div class="chatbox" id="chatbox">
+      <div class="message bot">Hallo! Wie kann ich dir helfen?</div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Deine Nachricht..." />
+      <button onclick="sendMessage()">Senden</button>
+    </div>
+  </div>
+
+  <script>
+    let mode = 'best';
+    const botResponses = {
+      fast: [
+        "OK, erledigt!",
+        "Hier ist eine schnelle Antwort.",
+        "Fertig, was kommt als Nächstes?"
+      ],
+      best: [
+        "Nach eingehender Analyse lautet meine Antwort:",
+        "Ich habe mein Bestes gegeben: ",
+        "Das scheint die beste Lösung zu sein:"
+      ],
+      balanced: [
+        "Das sollte passen!",
+        "Hier eine gute Lösung:",
+        "Angemessen und sinnvoll:"
+      ]
+    };
+
+    function setMode(selected) {
+      mode = selected;
+      document.querySelectorAll('.modes button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(selected).classList.add('active');
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const chatbox = document.getElementById('chatbox');
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = text;
+      chatbox.appendChild(userMsg);
+
+      const randomResponse = botResponses[mode][Math.floor(Math.random() * botResponses[mode].length)];
+      const botMsg = document.createElement('div');
+      botMsg.className = 'message bot';
+      botMsg.textContent = `${randomResponse} "${text}"`;
+      chatbox.appendChild(botMsg);
+
+      chatbox.scrollTop = chatbox.scrollHeight;
+      input.value = '';
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</body>
+</html>
