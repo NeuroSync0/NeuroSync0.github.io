@@ -10,9 +10,9 @@
       --text: #111827;
       --card: #ffffff;
       --border: #ddd;
-      --highlight: #14b8a6;      /* Türkis */
+      --highlight: #14b8a6;
       --bot-text: #4b5563;
-      --user-text: #2dd4bf;      /* Helles Türkis */
+      --user-text: #2dd4bf;
     }
 
     .dark {
@@ -25,75 +25,79 @@
       --user-text: #5eead4;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 600px;
-      width: 100%;
-      background: var(--card);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      gap: 12px;
     }
 
-    .header {
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .top-buttons {
+    header {
+      background: var(--card);
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
-    .top-buttons button {
-      padding: 6px 12px;
-      background: var(--highlight);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    header h1 {
+      margin: 0;
+      font-size: 20px;
     }
 
-    .modes {
+    main {
+      flex: 1;
       display: flex;
-      justify-content: center;
-      gap: 10px;
+      overflow: hidden;
     }
 
-    .modes button {
-      padding: 6px 12px;
-      border: 1px solid var(--border);
-      background: #f9f9f9;
-      cursor: pointer;
-      border-radius: 6px;
+    aside {
+      width: 220px;
+      background: var(--card);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
-    .modes button.active {
-      background: var(--highlight);
-      color: white;
-      border-color: var(--highlight);
+    .profile, .settings {
+      font-size: 14px;
+    }
+
+    .profile h2,
+    .settings h2 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .profile p,
+    .settings p {
+      margin: 4px 0;
+    }
+
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
     }
 
     .chatbox {
-      height: 400px;
+      flex: 1;
       overflow-y: auto;
-      border: 1px solid var(--border);
       padding: 10px;
-      border-radius: 6px;
+      border: 1px solid var(--border);
       background: #fafafa;
+      border-radius: 6px;
     }
 
     .dark .chatbox {
@@ -112,55 +116,100 @@
       color: var(--bot-text);
     }
 
-    .input-area {
+    .input-wrapper {
+      margin-top: 10px;
       display: flex;
       gap: 10px;
+      align-items: center;
     }
 
-    .input-area input {
+    .input-wrapper input {
       flex: 1;
-      padding: 8px;
+      padding: 10px;
       border-radius: 6px;
       border: 1px solid var(--border);
     }
 
-    .input-area button {
-      padding: 8px 16px;
+    .input-wrapper select,
+    .input-wrapper button {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
       background: var(--highlight);
       color: white;
-      border: none;
-      border-radius: 6px;
       cursor: pointer;
     }
+
+    .input-wrapper select {
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .dark .input-wrapper select {
+      background: var(--card);
+      color: var(--text);
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: var(--bot-text);
+    }
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="top-buttons">
-      <button onclick="alert('Abo aktivieren: 14,89€ / Monat (nur Demo)')">Profil</button>
-      <button onclick="toggleDarkMode()">Darkmode/Lightmode</button>
+  <header>
+    <h1>Demo NeuroSync</h1>
+    <div>
+      <button onclick="toggleDarkMode()">🌙 Darkmode</button>
     </div>
+  </header>
 
-    <div class="header">Demo NeuroSync</div>
+  <main>
+    <aside>
+      <div class="profile">
+        <h2>Profil</h2>
+        <p><strong>Nutzername:</strong> demo_user</p>
+        <p>Status: Demo</p>
+        <button onclick="alert('Abo aktivieren: 14,89€/Monat (nur Demo)')">Abo aktivieren</button>
+      </div>
+      <div class="settings">
+        <h2>Einstellungen</h2>
+        <p>Darkmode: über Button oben</p>
+        <p>(Weitere Optionen folgen...)</p>
+      </div>
+    </aside>
 
-    <div class="modes">
-      <button onclick="setMode('fast')" id="fast">Schnell</button>
-      <button onclick="setMode('best')" id="best" class="active">Gut</button>
-      <button onclick="setMode('balanced')" id="balanced">Ausgeglichen</button>
-    </div>
+    <section class="chat-area">
+      <div class="chatbox" id="chatbox">
+        <div class="message bot">Hallo! Wie kann ich dir helfen?</div>
+      </div>
+      <div class="input-wrapper">
+        <input type="text" id="userInput" placeholder="Deine Nachricht..." />
+        <select id="modeSelect">
+          <option value="fast">Schnell</option>
+          <option value="best" selected>Gut</option>
+          <option value="balanced">Ausgeglichen</option>
+        </select>
+        <button onclick="sendMessage()">Senden</button>
+      </div>
+    </section>
+  </main>
 
-    <div class="chatbox" id="chatbox">
-      <div class="message bot">Hallo! Wie kann ich dir helfen?</div>
-    </div>
-
-    <div class="input-area">
-      <input type="text" id="userInput" placeholder="Deine Nachricht..." />
-      <button onclick="sendMessage()">Senden</button>
-    </div>
-  </div>
+  <footer>
+    &copy; 2025 NeuroSync Demo – Keine echten KI-Funktionen aktiv
+  </footer>
 
   <script>
     let mode = 'best';
+
     const botResponses = {
       fast: [
         "OK, erledigt!",
@@ -169,7 +218,7 @@
       ],
       best: [
         "Nach eingehender Analyse lautet meine Antwort:",
-        "Ich habe mein Bestes gegeben: ",
+        "Ich habe mein Bestes gegeben:",
         "Das scheint die beste Lösung zu sein:"
       ],
       balanced: [
@@ -178,12 +227,6 @@
         "Angemessen und sinnvoll:"
       ]
     };
-
-    function setMode(selected) {
-      mode = selected;
-      document.querySelectorAll('.modes button').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(selected).classList.add('active');
-    }
 
     function sendMessage() {
       const input = document.getElementById('userInput');
@@ -197,10 +240,11 @@
       userMsg.textContent = text;
       chatbox.appendChild(userMsg);
 
-      const randomResponse = botResponses[mode][Math.floor(Math.random() * botResponses[mode].length)];
+      mode = document.getElementById('modeSelect').value;
+      const response = botResponses[mode][Math.floor(Math.random() * botResponses[mode].length)];
       const botMsg = document.createElement('div');
       botMsg.className = 'message bot';
-      botMsg.textContent = `${randomResponse} "${text}"`;
+      botMsg.textContent = `${response} "${text}"`;
       chatbox.appendChild(botMsg);
 
       chatbox.scrollTop = chatbox.scrollHeight;
