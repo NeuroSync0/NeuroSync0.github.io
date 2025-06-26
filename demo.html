@@ -13,6 +13,9 @@
       --highlight: #14b8a6;
       --bot-text: #4b5563;
       --user-text: #2dd4bf;
+      --button-bg: var(--highlight);
+      --button-color: white;
+      --button-radius: 6px;
     }
 
     .dark {
@@ -59,12 +62,17 @@
     }
 
     .header-buttons button {
-      background: var(--highlight);
-      color: white;
+      background: var(--button-bg);
+      color: var(--button-color);
       border: none;
       padding: 8px 12px;
-      border-radius: 6px;
+      border-radius: var(--button-radius);
       cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .header-buttons button:hover {
+      background: #0d9488;
     }
 
     main {
@@ -100,6 +108,21 @@
     .profile p,
     .settings p {
       margin: 4px 0;
+    }
+
+    .profile button,
+    .settings button {
+      background: var(--button-bg);
+      color: var(--button-color);
+      padding: 8px 12px;
+      border: none;
+      border-radius: var(--button-radius);
+      cursor: pointer;
+    }
+
+    .profile button:hover,
+    .settings button:hover {
+      background: #0d9488;
     }
 
     .chat-area {
@@ -144,23 +167,17 @@
     .input-wrapper input {
       flex: 1;
       padding: 10px;
-      border-radius: 6px;
+      border-radius: var(--button-radius);
       border: 1px solid var(--border);
-    }
-
-    .input-wrapper select,
-    .input-wrapper button {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--highlight);
-      color: white;
-      cursor: pointer;
     }
 
     .input-wrapper select {
+      padding: 10px;
+      border-radius: var(--button-radius);
+      border: 1px solid var(--border);
       background: white;
       color: var(--text);
+      cursor: pointer;
     }
 
     .dark .input-wrapper select {
@@ -168,8 +185,17 @@
       color: var(--text);
     }
 
-    button:hover {
-      opacity: 0.9;
+    .input-wrapper button {
+      background: var(--button-bg);
+      color: var(--button-color);
+      padding: 10px 16px;
+      border: none;
+      border-radius: var(--button-radius);
+      cursor: pointer;
+    }
+
+    .input-wrapper button:hover {
+      background: #0d9488;
     }
 
     footer {
@@ -225,6 +251,8 @@
   </footer>
 
   <script>
+    let currentPanel = null;
+
     function sendMessage() {
       const input = document.getElementById('userInput');
       const text = input.value.trim();
@@ -255,17 +283,19 @@
       const profile = document.getElementById('profilePanel');
       const settings = document.getElementById('settingsPanel');
 
-      sidebar.classList.add('active');
-      profile.style.display = 'none';
-      settings.style.display = 'none';
-
-      if (panel === 'profile') {
-        profile.style.display = 'block';
-      } else if (panel === 'settings') {
-        settings.style.display = 'block';
+      if (currentPanel === panel) {
+        sidebar.classList.remove('active');
+        profile.style.display = 'none';
+        settings.style.display = 'none';
+        currentPanel = null;
+        return;
       }
+
+      sidebar.classList.add('active');
+      profile.style.display = panel === 'profile' ? 'block' : 'none';
+      settings.style.display = panel === 'settings' ? 'block' : 'none';
+      currentPanel = panel;
     }
   </script>
 </body>
 </html>
-
